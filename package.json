@@ -15,12 +15,13 @@
     "allure:clear": "npm run clear:allure && npm run clear:cypress",
     "clear:allure": "rimraf allure-results allure-results-aggregated-files allure-report",
     "clear:cypress": "rimraf cypress/screenshots cypress/videos",
-    "cypress": "npm run allure:clear && npx cypress run --browser firefox --spec cypress/e2e/test-cases/time-sheet-spec.cy.ts --env allure=true && npm run allure:report",
-    "ul-regression-allure": "npx cypress run --browser firefox --spec cypress/e2e/test-cases/time-sheet-spec.cy.ts --env allure=true && npm run allure:report"
+    "cypress": "npm run allure:clear && npx cypress run --browser firefox --spec cypress/e2e/test-cases/employee-claims-spec.cy.ts --env allure=true && npm run allure:report",
+    "ul-regression-allure": "npx cypress run --browser firefox --spec cypress/e2e/test-cases/employee-claims-spec.cy.ts --env allure=true && npm run allure:report"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "moment": "^2.29.4",
     "typescript": "^5.2.2"
   }
 }

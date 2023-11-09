@@ -58,7 +58,7 @@ function login(username: string, password: string) {
 
 function logout() {
   cy.get(".oxd-userdropdown-tab > .oxd-icon").click();
-  cy.get(":nth-child(4) > .oxd-userdropdown-link").click();
+  cy.get(".oxd-dropdown-menu").find("[role='menuitem']").contains("Logout").click()
 }
 
 Cypress.Commands.add("login", login);
