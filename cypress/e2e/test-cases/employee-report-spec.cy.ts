@@ -1,7 +1,8 @@
 import { EmployeeResponse } from "../../support/API/Response/employees-response";
 import { JobTitlesResponse } from "../../support/API/Response/job-titles-response";
 import { LocationsResponse } from "../../support/API/Response/locations-response";
-import { ApiHelper } from "../../support/Helpers/api-helper";
+import { ReportApiHelper } from "../../support/Helpers/Employee Report Page Helpers/api-helper";
+import { PIMApiHelper } from "../../support/Helpers/PIM Page Helpers/api-Helper";
 import { JobTitlesPayloadInitializer } from "../../support/Initializers/Pyload Initializers/job-titles-payload-init";
 import { LocationsPayloadInitializer } from "../../support/Initializers/Pyload Initializers/locations-payload-init";
 import { AddReportPage } from "../../support/POM/PIM Page Files/Reports/add-report-page";
@@ -19,6 +20,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 });
 
 describe("Employee Report Page Test Cases", () => {
+  let MY_REPORT_PAGE: MyReportPage;
   const LOCATION_DETAILS = LocationsPayloadInitializer.init();
   const JOB = JobTitlesPayloadInitializer.init();
 
@@ -27,13 +29,14 @@ describe("Employee Report Page Test Cases", () => {
   let job: JobTitlesResponse;
 
   beforeEach(() => {
+    MY_REPORT_PAGE = new MyReportPage();
     cy.login("Admin", "admin123");
 
-    ApiHelper.addLocation(LOCATION_DETAILS).then((locationResponse) => {
+    ReportApiHelper.addLocation(LOCATION_DETAILS).then((locationResponse) => {
       location = locationResponse;
     });
 
-    ApiHelper.createJob(JOB).then((jobResponse) => {
+    ReportApiHelper.createJob(JOB).then((jobResponse) => {
       job = jobResponse;
 
       addEmployeeDetails(job.id, location.id).then((employee) =>
@@ -55,25 +58,29 @@ describe("Employee Report Page Test Cases", () => {
     PIMSharedPage.openReportsTab();
     ReportsPage.addReport();
     AddReportPage.fillReport("report");
+
     cy.fixture("report").then((report) => {
-      MyReportPage.verifyReportName(report.name);
-      MyReportPage.verifyReportTableHeaders(report.displayField);
-      MyReportPage.verifyReportTableRowsNumber(employees.length);
-      ApiHelper.getReportId(report.name).then((reportResponse) => {
-        ApiHelper.getReportData(reportResponse.id).then((reportDataRespone) => {
-          MyReportPage.verifyTableData(report.displayField, reportDataRespone);
+      MY_REPORT_PAGE.verifyReportName(report.name);
+      MY_REPORT_PAGE.verifyReportTableHeaders(report.displayField);
+      MY_REPORT_PAGE.verifyReportTableRowsNumber(employees.length);
+      ReportApiHelper.getReportId(report.name).then((reportResponse) => {
+        ReportApiHelper.getReportData(reportResponse.id).then((reportDataRespone) => {
+          MY_REPORT_PAGE.verifyTableData(
+            report.displayField,
+            reportDataRespone
+          );
         });
       });
     });
   });
 
   afterEach(() => {
-    ApiHelper.deleteEmployees(employees.map((employee) => employee.empNumber));
-    ApiHelper.deleteJobTitles([job.id]);
-    ApiHelper.deleteLocations([location.id]);
+    PIMApiHelper.deleteEmployees(employees.map((employee) => employee.empNumber));
+    ReportApiHelper.deleteJobTitles([job.id]);
+    ReportApiHelper.deleteLocations([location.id]);
     cy.fixture("report").then((report) =>
-      ApiHelper.getReportId(report.name).then((reportResponse) => {
-        ApiHelper.deletReports([reportResponse.id]);
+      ReportApiHelper.getReportId(report.name).then((reportResponse) => {
+        ReportApiHelper.deletReports([reportResponse.id]);
       })
     );
   });

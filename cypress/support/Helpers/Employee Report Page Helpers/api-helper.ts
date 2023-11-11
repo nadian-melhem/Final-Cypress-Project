@@ -1,15 +1,14 @@
-import { JobTitlePayload } from "../API/Payload/job-titles-payload";
-import { LocationPayload } from "../API/Payload/locations-payload";
-import { SalaryComponentPayload } from "../API/Payload/salay-components-payload";
-import { URLS } from "../Constants/api-urls";
-import { EmployeePayloadInitializer } from "../Initializers/Pyload Initializers/employees-payload-init";
-import { JobDetailsPayloadInitializer } from "../Initializers/Pyload Initializers/job-details-payload-init";
-import { EmployeesResponseInitializer } from "../Initializers/Response Initializers/employees-response-init";
-import { JobTitlesResponseInitializer } from "../Initializers/Response Initializers/job-titles-response-init";
-import { LocationsResponseInitializer } from "../Initializers/Response Initializers/locations-resonse-init";
-import { ReportDataResponseInitializer } from "../Initializers/Response Initializers/report-data-response-initializer";
+import { JobTitlePayload } from "../../API/Payload/job-titles-payload";
+import { LocationPayload } from "../../API/Payload/locations-payload";
+import { SalaryComponentPayload } from "../../API/Payload/salay-components-payload";
+import { URLS } from "../../Constants/api-urls";
+import { JobDetailsPayloadInitializer } from "../../Initializers/Pyload Initializers/job-details-payload-init";
+import { JobTitlesResponseInitializer } from "../../Initializers/Response Initializers/job-titles-response-init";
+import { LocationsResponseInitializer } from "../../Initializers/Response Initializers/locations-resonse-init";
+import { ReportDataResponseInitializer } from "../../Initializers/Response Initializers/report-data-response-initializer";
+import moment = require("moment");
 
-export class ApiHelper {
+export class ReportApiHelper {
   static addLocation(location: LocationPayload) {
     return cy
       .request({
@@ -31,18 +30,6 @@ export class ApiHelper {
       })
       .then((response) => {
         return JobTitlesResponseInitializer.init(response.body.data);
-      });
-  }
-
-  static addEmployee() {
-    return cy
-      .request({
-        method: "POST",
-        url: URLS.EMPLOYEES,
-        body: EmployeePayloadInitializer.init(),
-      })
-      .then((response) => {
-        return EmployeesResponseInitializer.init(response.body.data);
       });
   }
 
@@ -74,14 +61,6 @@ export class ApiHelper {
     cy.request({
       method: "DELETE",
       url: URLS.JOB_TITLES,
-      body: { ids: ids },
-    });
-  }
-
-  static deleteEmployees(ids) {
-    cy.request({
-      method: "DELETE",
-      url: URLS.EMPLOYEES,
       body: { ids: ids },
     });
   }
