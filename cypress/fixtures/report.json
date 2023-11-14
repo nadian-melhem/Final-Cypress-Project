@@ -1,0 +1,21 @@
+{
+  "name": "report80",
+  "selectionCriteria": [
+    "Job Title",
+    "Location"
+  ],
+  "displayFieldGroup": [
+    "Personal",
+    "Job",
+    "Salary"
+  ],
+  "displayField": [
+    "Employee First Name",
+    "Job Title",
+    "Amount"
+  ],
+  "selectionCriteriaData": [
+    "Junior QA 99",
+    "Anabta 5"
+  ]
+}
